@@ -1,0 +1,26 @@
+name: Sync Azure DevOps
+
+on:
+  push:
+    branches:
+      - master  # Se ejecuta solo cuando haces push en la rama "master"
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout código de GitHub
+      uses: actions/checkout@v3
+
+    - name: Configurar Git
+      run: |
+        git config --global user.email "udidierandres@gmail.com"
+        git config --global user.name "Didier Usuga"
+
+    - name: Agregar remoto de Azure DevOps y enviar cambios
+      run: |
+        git remote add azure https://$AZURE_DEVOPS_TOKEN@dev.azure.com/didier-usuga/ParacelSoft/_git/ParacelSoft
+        git push azure main
+      env:
+        AZURE_DEVOPS_TOKEN: ${{ secrets.AZURE_DEVOPS_TOKEN }}
